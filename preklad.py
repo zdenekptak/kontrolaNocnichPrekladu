@@ -10,32 +10,37 @@ import json
 
 class Preklady:
     
-    def kontrola():
-        helios = {"HeO2-Beta" : "N:\HeliosIQ\Beta\Helios.exe", 
-                  "HeO2-RC" : "N:\HeliosIQ\RC\Helios.exe", 
-                  "HeO3-Beta" : "N:\HeliosIQ\HeO3_Beta\Helios.exe", 
-                  "HeO3-RC" : "N:\HeliosIQ\HeO3_RC\Helios.exe"
-                 }
-        vysledek = []
-        for h, cesta in helios.items():
-            nowDate = datetime.now() # current date and time
-            datumDnesniDen = int(nowDate.strftime("%d"))
+    def kontrola(configCesty):
 
-            datumSouboru = time.ctime(os.path.getmtime(cesta))
-    #         print(f"Poslední změna {h} proběhla: {datumSouboru}")
+        with open(configCesty) as json_file:
 
-            datumVytvoreniSouboru = time.ctime(os.path.getctime(cesta))
-    #         print(f"Souboru vutvoren: \n {datumVytvoreniSouboru}")
+            configCesty = json.load(json_file)            
 
-            datumSouboruDen = [int(s) for s in datumSouboru.split() if s.isdigit()][0]
-            if datumSouboruDen == datumDnesniDen:
-                vyslZprava = (f"{h} je OK")
-                vysledek.append(vyslZprava)
-            else:
-                vyslZprava = (f"{h} překlad neproběhl!!!")
-                vysledek.append(vyslZprava)
-        vysledek =  vysledek[0] + '\n' + vysledek[1] + '\n' + vysledek[2] + '\n' + vysledek[3]
-        return vysledek
+
+        vysledkyPrekladuSouboru = []
+        for verzeHeliosu, souborCesta in configCesty.items():
+            for soubor, cesta in souborCesta.items():
+                nowDate = datetime.now() # current date and time
+                datumDnesniDen = int(nowDate.strftime("%d"))
+
+                datumSouboru = time.ctime(os.path.getmtime(cesta))
+    #             print(f"Poslední změna {s} proběhla: {datumSouboru}")
+
+                datumVytvoreniSouboru = time.ctime(os.path.getctime(cesta))
+    #             print(f"Souboru vutvoren: \n {datumVytvoreniSouboru}")
+
+                datumSouboruDen = [int(s) for s in datumSouboru.split() if s.isdigit()][0]
+                if datumSouboruDen == datumDnesniDen:
+                    vyslZprava = (f"{verzeHeliosu} {soubor} je OK")
+                    vysledkyPrekladuSouboru.append([vyslZprava])
+                else:
+                    vyslZprava = (f"{verzeHeliosu} {soubor} překlad neproběhl!!!")
+                    vysledkyPrekladuSouboru.append({vyslZprava})
+        zprava = ''            
+        for v in vysledkyPrekladuSouboru:
+            vstring = v[0]
+            zprava = zprava + '\n' + vstring
+        return zprava
 
     def ulozeniVysledku(vysledky):
         with open('probehlpreklad.txt', 'w') as filehandle:
