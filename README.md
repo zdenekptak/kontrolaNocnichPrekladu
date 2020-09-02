@@ -9,6 +9,9 @@ V souboru `config.json` se nastavuje konkrétní odesílatel, příjemci a heslo
 * prijemci
 * heslo
 
+V souboru `souborykekontrole.json` se nastavuje konkrétní cesty k souborům
+
+
 ## Spuštění
 ```
 python run.py
