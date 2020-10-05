@@ -1,5 +1,6 @@
 {
     "odesilatel": "your_email",
-    "prijemci": ["john.doe@example.com", "john.smith@example.co.uk"],
+    "prijemciok": ["john.doe@example.com", "john.smith@example.co.uk"],
+    "prijemciko": ["john.doe@example.com", "john.smith@example.co.uk"],
     "heslo": "your_password"
 }
