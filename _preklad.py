@@ -105,11 +105,8 @@ class Preklady:
                    config_soubor,
                    textZpravy, 
                    predmet,
-                   attachment_locations):
-
-        if predmet == True:
-            attachment_locations = []
-            
+                   attachment_location = ''):
+        
         msg = MIMEMultipart()
 
         with open(config_soubor) as json_file:
@@ -135,22 +132,21 @@ class Preklady:
 
         msg.attach(MIMEText(textZpravy, 'plain'))
 
-        if attachment_locations:
-            for att_loc in attachment_locations:
-                filename = os.path.basename(att_loc)
-                attachment = open(att_loc, "rb")
-                part = MIMEBase('application', 'octet-stream')
-                part.set_payload(attachment.read())
-                encoders.encode_base64(part)
-                part.add_header('Content-Disposition',
-                                "attachment; filename= %s" % filename)
-                msg.attach(part)
+        if attachment_location != '':
+            filename = os.path.basename(attachment_location)
+            attachment = open(attachment_location, "rb")
+            part = MIMEBase('application', 'octet-stream')
+            part.set_payload(attachment.read())
+            encoders.encode_base64(part)
+            part.add_header('Content-Disposition',
+                            "attachment; filename= %s" % filename)
+            msg.attach(part)
 
         try:
-            server = smtplib.SMTP('assecosol-com.mail.protection.outlook.com', 25)
+            server = smtplib.SMTP('smtp.office365.com', 587)
             server.ehlo()
             server.starttls()
-            # server.login('zdenek.ptak@assecosol.com', heslo)
+            server.login('zdenek.ptak@assecosol.com', heslo)
             text = msg.as_string()
             server.sendmail(odesilatel, prijemci, text)
             print('email odeslan')

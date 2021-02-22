@@ -1,6 +1,6 @@
 {
-    "odesilatel": "your_email",
-    "prijemciok": ["john.doe@example.com", "john.smith@example.co.uk"],
-    "prijemciko": ["john.doe@example.com", "john.smith@example.co.uk"],
-    "heslo": "your_password"
+    "odesilatel": "test@assecosol.com",
+    "prijemciok": ["Zdenek.Ptak@assecosol.com", "Jan.Holman@assecosol.com", "Jaroslav.Andel@assecosol.com", "Richard.Svab@assecosol.com"],
+    "prijemciko": ["Zdenek.Ptak@assecosol.com", "Jan.Holman@assecosol.com", "Jaroslav.Andel@assecosol.com", "Richard.Svab@assecosol.com", "orangevy@assecosol.com", "OrangeARK@assecosol.com"],
+    "heslo": "test@assecosol.com"
 }

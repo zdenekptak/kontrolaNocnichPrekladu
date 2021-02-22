@@ -18,15 +18,15 @@ class Preklady:
         vysledkyPrekladuSouboru = []
         vysledkyOKKO = []
         for soubor, cesta in self.souborCesta.items():
-
             nowDate = datetime.now() # current date and time
 
             datumDnesniDen = int(nowDate.strftime("%d"))
 
             try:
-                modification_time  = os.path.getmtime(cesta)
-                datumSouboru = time.ctime(modification_time)
-                datumSouboruDen = [int(s) for s in datumSouboru.split() if s.isdigit()][0]    
+                datumSouboru = time.ctime(os.path.getmtime(cesta))
+                datumSouboruDen = [int(s) for s in datumSouboru.split() if s.isdigit()][0]
+    #         print(f"Poslední změna {soubor} proběhla: {datumSouboru}")
+    
             except:
                 datumSouboruDen = 'neni'
 
@@ -105,11 +105,8 @@ class Preklady:
                    config_soubor,
                    textZpravy, 
                    predmet,
-                   attachment_locations):
-
-        if predmet == True:
-            attachment_locations = []
-            
+                   attachment_location = ''):
+        
         msg = MIMEMultipart()
 
         with open(config_soubor) as json_file:
@@ -135,22 +132,21 @@ class Preklady:
 
         msg.attach(MIMEText(textZpravy, 'plain'))
 
-        if attachment_locations:
-            for att_loc in attachment_locations:
-                filename = os.path.basename(att_loc)
-                attachment = open(att_loc, "rb")
-                part = MIMEBase('application', 'octet-stream')
-                part.set_payload(attachment.read())
-                encoders.encode_base64(part)
-                part.add_header('Content-Disposition',
-                                "attachment; filename= %s" % filename)
-                msg.attach(part)
+        if attachment_location != '':
+            filename = os.path.basename(attachment_location)
+            attachment = open(attachment_location, "rb")
+            part = MIMEBase('application', 'octet-stream')
+            part.set_payload(attachment.read())
+            encoders.encode_base64(part)
+            part.add_header('Content-Disposition',
+                            "attachment; filename= %s" % filename)
+            msg.attach(part)
 
         try:
-            server = smtplib.SMTP('assecosol-com.mail.protection.outlook.com', 25)
+            server = smtplib.SMTP('smtp.office365.com', 587)
             server.ehlo()
             server.starttls()
-            # server.login('zdenek.ptak@assecosol.com', heslo)
+            server.login('zdenek.ptak@assecosol.com', heslo)
             text = msg.as_string()
             server.sendmail(odesilatel, prijemci, text)
             print('email odeslan')

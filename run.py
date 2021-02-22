@@ -1,12 +1,14 @@
 from preklad import Preklady
 
-configCesta = "C:/Users/zdenek.ptak/Repository/Kontrola_prekladu/souborykekontrole.json"
-config = "C:/Users/zdenek.ptak/Repository/Kontrola_prekladu/config.json"
+souboryKeKonrole = "C:/Helios/Repository/kontrolaNocnichPrekladu/souborykekontrole.json"
+config = "C:/Helios/Repository/kontrolaNocnichPrekladu/configtest.json"
+attachment_locations = ["C:/Helios/Repository/kontrolaNocnichPrekladu/log.txt",
+                        "C:/Helios/Repository/kontrolaNocnichPrekladu/test.txt"]
 preklady = Preklady()
-emailZprava = preklady.vsechnyVerzeKontrola(configCesta)[0]
-predmet = preklady.vsechnyVerzeKontrola(configCesta)[1]
+emailZprava = preklady.vsechnyVerzeKontrola(souboryKeKonrole)[0]
+predmet = preklady.vsechnyVerzeKontrola(souboryKeKonrole)[1]
 
 if predmet == True:
-    preklady.posliEmail(config, emailZprava, predmet)
+    preklady.posliEmail(config, emailZprava, predmet, attachment_locations)
 else:
-    preklady.posliEmail(config, emailZprava, predmet)
+    preklady.posliEmail(config, emailZprava, predmet, attachment_locations)
